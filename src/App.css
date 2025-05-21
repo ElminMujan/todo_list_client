@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  align-items: center;
+  margin: 10% auto;
+  gap: 1rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container .items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.container .input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 2px;
+}
+
+.container .input-wrapper > input {
+  padding: 6px 10px;
+}
+
+.container .actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.container .actions button {
+  padding: 10px 16px;
+  background-color: rgb(7, 107, 238);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.item-wrapper p {
+  margin: 0;
+}
