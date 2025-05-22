@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 type ItemType = {
@@ -7,24 +7,63 @@ type ItemType = {
 };
 
 type ItemsType = ItemType[];
+const getItems = async () => {
+  const response = await fetch("http://localhost:3000/items");
+  return response;
+};
+const addItem = async (item: ItemType) => {
+  await fetch("http://localhost:3000/items", {
+    method: "POST",
+    body: JSON.stringify(item),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+};
 
+const deleteItems = async () => {
+  await fetch("http://localhost:3000/items", { method: "DELETE" });
+};
 function App() {
   const [items, setItems] = useState<ItemsType>([]);
 
   const [taskName, setTaskName] = useState<string>("");
   const [taskDescription, setTaskDescription] = useState<string>("");
+  useEffect(() => {
+    getItems().then(async (res) => {
+      const data = await res.json();
+      console.log(data);
+      setItems(data);
+    });
+  }, []);
+  // const addItem = () => {
+  //   const item: ItemType = { title: taskName, description: taskDescription };
+  //   if (item.title !== "" && item.description !== "") {
+  //     setItems((prev) => [...prev, item]);
+  //     setTaskName("");
+  //     setTaskDescription("");
+  //   }
+  // };
 
-  const addItem = () => {
+  const handleAddItem = async () => {
     const item: ItemType = { title: taskName, description: taskDescription };
-    if (item.title !== "" && item.description !== "") {
-      setItems((prev) => [...prev, item]);
-      setTaskName("");
-      setTaskDescription("");
-    }
+    await addItem(item);
+    getItems().then(async (res) => {
+      const data = await res.json();
+      console.log(data);
+      setItems(data);
+    });
+    setTaskName("");
+    setTaskDescription("");
   };
-
-  const clearTaskList = () => {
-    setItems([]);
+  const clearTaskList = async () => {
+    await deleteItems();
+    getItems().then(async (res) => {
+      const data = await res.json();
+      console.log(data);
+      setItems(data);
+    });
   };
   return (
     <div className="container">
@@ -54,7 +93,7 @@ function App() {
       </div>
 
       <div className="actions">
-        <button type="button" onClick={addItem}>
+        <button type="button" onClick={handleAddItem}>
           Novi task
         </button>
         <button type="button" onClick={clearTaskList}>
